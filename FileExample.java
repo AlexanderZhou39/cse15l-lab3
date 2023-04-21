@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,15 +42,24 @@ public class FileExample {
 	static List<File> getFiles(File start) throws IOException {
 	  File f = start;
 	  List<File> result = new ArrayList<>();
-	  result.add(start);
+	  // result.add(start);
 	  if(f.isDirectory()) {
 	    File[] paths = f.listFiles();
 	    for(File subFile: paths) {
-	      result.add(subFile);
+	      // result.add(subFile);
+        List<File> otherFiles = getFiles(subFile);
+        for (File oFile: otherFiles) {
+          result.add(0, oFile);
+        }
 	    }
-	  }
+	  } else {
+      result.add(0, f);
+    }
 	  return result;
 	}
-}
 
+  public static void main(String[] args) throws Exception {
+    System.out.println(getFiles(new File(args[0])));
+  }
+}
 
